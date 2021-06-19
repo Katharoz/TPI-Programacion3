@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Descripcion.cs" />
+    <Compile Include="Description.cs" />
     <Compile Include="FileFinder.cs" />
     <Compile Include="Form.cs">
       <SubType>Form</SubType>

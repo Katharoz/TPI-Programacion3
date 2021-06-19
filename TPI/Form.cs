@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TPI
@@ -15,109 +8,94 @@ namespace TPI
     public partial class FileManager : Form
     {
         string filePath = "C:/";
-        string itemSeleccionado = "";
-        List<Descripcion> descripciones = new List<Descripcion>();
-        FileInfo pathInfo;
+        string selectedItem = "";
+        List<Description> descriptions = new List<Description>();
+        string actualPath = null;
 
         public FileManager()
         {
             InitializeComponent();
-            CargarArchivosYCarpetas();
+            LoadFilesAndDirectories();
         }
 
-        public void CargarArchivosYCarpetas()
+        public void LoadFilesAndDirectories()
         {
-            DirectoryInfo listaArchivos;
-            listaArchivos = new DirectoryInfo(filePath);
+            listView.Items.Clear();
 
-            DirectoryInfo[] carpetas = listaArchivos.GetDirectories();
-            FileInfo[] archivos = listaArchivos.GetFiles();
-
-            VistaEnLista.Items.Clear();
-
-            Filefinder.BuscarArchivosPorCarpeta(filePath);
-            CargarCarpetas(Filefinder.getDirectories().ToArray());
-            CargarArchivos(Filefinder.getFiles().ToArray());
-
-            //CargarCarpetas(carpetas);
-            //CargarArchivos(archivos);
-
+            Filefinder.SearchFilesAndDirectories(filePath);
+            LoadDirectories(Filefinder.GetDirectories());
+            LoadFiles(Filefinder.GetFiles());
         }
 
-        public void CargarCarpetas(DirectoryInfo[] carpetas)
+        public void LoadDirectories(List<DirectoryInfo> directories)
         {
-            for (int i = 0; i < carpetas.Length; i++)
+            foreach (DirectoryInfo dirInfo in directories)
             {
-                if ((carpetas[i].Attributes & FileAttributes.Hidden) != FileAttributes.Hidden)
+                if ((dirInfo.Attributes & FileAttributes.Hidden) != FileAttributes.Hidden)
                 {
-                    VistaEnLista.Items.Add(carpetas[i].Name, 0);
+                    listView.Items.Add(dirInfo.Name, 0);
                 }
             }
         }
 
-        public void CargarArchivos(FileInfo[] archivos)
+        public void LoadFiles(List<FileInfo> files)
         {
-            for (int i = 0; i < archivos.Length; i++)
+            foreach (FileInfo fileInfo in files)
             {
-                if ((archivos[i].Attributes & FileAttributes.Hidden) != FileAttributes.Hidden)
+                if ((fileInfo.Attributes & FileAttributes.Hidden) != FileAttributes.Hidden)
                 {
-                    VistaEnLista.Items.Add(archivos[i].Name, 1);
+                    listView.Items.Add(fileInfo.Name, 1);
                 }
             }
         }
 
-        private void VistaEnLista_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        private void ListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            itemSeleccionado = e.Item.Text;
-            //barraBúsqueda.Text = filePath + "/" + itemSeleccionado;
-
+            selectedItem = e.Item.Text;
         }
 
-        private void VistaEnLista_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void ListView_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            FileAttributes atributos;
+            searchBar.Text = "";
+            descriptionTextBox.Text = "";
+
+            FileAttributes attributes;
             try
             {
-                atributos = File.GetAttributes(filePath + "/" + itemSeleccionado);
+                attributes = File.GetAttributes(filePath + "/" + selectedItem);
             }
             catch
             {
-                atributos = File.GetAttributes(Directory.GetFiles(filePath, itemSeleccionado, SearchOption.AllDirectories).First());
-                //atributos = File.GetAttributes(BuscarArchivo(filePath));
+                attributes = File.GetAttributes(Filefinder.GetActualPath(filePath, selectedItem));
             }
             
-            if ((atributos & FileAttributes.Directory) == FileAttributes.Directory)
+            if ((attributes & FileAttributes.Directory) == FileAttributes.Directory)
             {
-                filePath = filePath + "/" + itemSeleccionado;
-                CargarArchivosYCarpetas();
+                filePath = filePath + "/" + selectedItem;
+                LoadFilesAndDirectories();
             }
             else
             {
-                Descripcion temp = CheckearDescripcionExistente();
+                Description temp = CheckDescriptions();
                 if (temp != null)
                 {
-                    descripcionTextBox.Text = temp.getDescripcion();
+                    descriptionTextBox.Text = temp.GetDescripcion();
                 }
-                descripcionTextBox.Focus();
-                botónGuardar.Enabled = true;
-                botónCancelar.Enabled = true;
+                descriptionTextBox.Focus();
+                saveButton.Enabled = true;
+                cancelButton.Enabled = true;
             }
-
-            
         }
 
-        public Descripcion CheckearDescripcionExistente()
+        public Description CheckDescriptions()
         {
-            Descripcion temp = null;
+            Description temp = null;
 
-            Filefinder.BuscarArchivosPorNombre(filePath, itemSeleccionado);
-            string actualPath = Filefinder.getFiles().First().FullName;
+            actualPath = Filefinder.GetActualPath(filePath, selectedItem);
 
-            foreach (Descripcion descripcion in descripciones)
+            foreach (Description descripcion in descriptions)
             {
-                
-
-                if (descripcion.getPath().Equals(actualPath))
+                if (descripcion.GetPath().Equals(actualPath))
                 {
                     temp = descripcion;
                     break;
@@ -126,126 +104,55 @@ namespace TPI
             return temp;
         }
 
-        private void botónVolver_Click(object sender, EventArgs e)
+        private void BackButton_Click(object sender, EventArgs e)
         {
             if (filePath != "C:/")
             {
                 filePath = filePath.Substring(0, filePath.LastIndexOf("/"));
-                CargarArchivosYCarpetas();
+                LoadFilesAndDirectories();
             }
-            
         }
 
-        private void botónCancelar_Click(object sender, EventArgs e)
+        private void SearchButton_Click(object sender, EventArgs e)
         {
-            descripcionTextBox.Text = "";
-            descripcionTextBox.Focus();
+            Filefinder.SearchFilesByName(filePath, searchBar.Text);
+            Filefinder.SearchFilesByDescription(descriptions, searchBar.Text);
+
+            listView.Items.Clear();
+
+            LoadFiles(Filefinder.GetFiles());
         }
 
-        public void descripcionTextBox_LostFocus(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e)
         {
-            if (!botónCancelar.Focused && !botónGuardar.Focused)
-            {
-                botónCancelar.Enabled = false;
-                botónGuardar.Enabled = false;
-            }
-            
+            descriptionTextBox.Text = "";
+            descriptionTextBox.Focus();
         }
 
-        private void botónGuardar_Click(object sender, EventArgs e)
+        private void SaveButton_Click(object sender, EventArgs e)
         {
-            string actualPath = null;
-
-            Descripcion temp = CheckearDescripcionExistente();
+            Description temp = CheckDescriptions();
             if (temp == null)
             {
-                Filefinder.BuscarArchivosPorNombre(filePath, itemSeleccionado);
-                actualPath = Filefinder.getFiles().First().FullName;
-
-                descripciones.Add(new Descripcion(actualPath, descripcionTextBox.Text));
+                actualPath = Filefinder.GetActualPath(filePath, selectedItem);
+                descriptions.Add(new Description(actualPath, descriptionTextBox.Text));
             }
             else
             {
-                temp.setDescripcion(descripcionTextBox.Text);
+                temp.SetDescripcion(descriptionTextBox.Text);
             }
-            descripcionTextBox.Focus();
-
-            barraBúsqueda.Text = actualPath;
+            descriptionTextBox.Focus();
         }
 
-        #region Big Mess
-        /*
-        //private static List<string> files = new List<string>();
-        private void botónBuscar_Click(object sender, EventArgs e)
+        public void DescriptionTextBox_LostFocus(object sender, EventArgs e)
         {
-            //files.Clear();
-            List<FileInfo> fileInfo = new List<FileInfo>();
-            string[] files = Directory.GetFiles(filePath, "*" +barraBúsqueda.Text+ "*", SearchOption.AllDirectories);
-            //string[] files = Directory.EnumerateFiles(filePath, "*" +barraBúsqueda.Text+ "*", SearchOption.AllDirectories).ToArray();
-
-            //BuscarArchivos(filePath);
+            if (!cancelButton.Focused && !saveButton.Focused)
+            {
+                cancelButton.Enabled = false;
+                saveButton.Enabled = false;
+            }
             
-
-            foreach (string file in files)
-            {
-                fileInfo.Add(new FileInfo(file));
-            }
-
-            VistaEnLista.Items.Clear();
-
-            CargarArchivos(fileInfo.ToArray());
         }
 
-        public string BuscarArchivo(string path)
-        {
-            foreach (string file in Directory.GetFiles(path))
-            {
-                if (file.Contains(itemSeleccionado))
-                {
-                    return file;
-                }
-            }
-            foreach (string dir in Directory.GetDirectories(path))
-            {
-                return BuscarArchivo(dir);
-            }
-            return null;
-        }
-
-        public void BuscarArchivos(string path)
-        {
-            try
-            {
-                foreach (string file in Directory.GetFiles(path))
-                {
-                    if (file.ToLower().Contains(barraBúsqueda.Text.ToLower()))
-                    {
-                        files.Add(file);
-                    }
-                }
-
-                foreach (string dir in Directory.GetDirectories(path))
-                {
-                    BuscarArchivos(dir);
-                }
-            }
-            catch (UnauthorizedAccessException)
-            {
-
-            }
-        }
-        */
-        #endregion
-
-
-        private void botónBuscar_Click(object sender, EventArgs e)
-        {
-            Filefinder.BuscarArchivosPorNombre(filePath, barraBúsqueda.Text);
-
-            VistaEnLista.Items.Clear();
-
-            CargarArchivos(Filefinder.getFiles().ToArray());
-
-        }
     }
 }

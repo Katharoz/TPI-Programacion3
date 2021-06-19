@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace TPI
 {
@@ -13,7 +9,7 @@ namespace TPI
         private static List<FileInfo> fileInfo = new List<FileInfo>();
         private static List<DirectoryInfo> directoryInfo = new List<DirectoryInfo>();
 
-        public static void BuscarArchivosPorCarpeta(string filePath)
+        public static void SearchFilesAndDirectories(string filePath)
         {
             fileInfo.Clear();
             directoryInfo.Clear();
@@ -30,7 +26,7 @@ namespace TPI
 
         }
 
-        public static void BuscarArchivosPorNombre(string filePath, string searchPattern)
+        public static void SearchFilesByName(string filePath, string searchPattern)
         {
             fileInfo.Clear();
 
@@ -40,14 +36,29 @@ namespace TPI
             }
         }
 
+        public static void SearchFilesByDescription(List<Description> descriptions, string searchPattern)
+        {
+            foreach (Description description in descriptions)
+            {
+                if (description.GetDescripcion().ToLower().Contains(searchPattern.ToLower()))
+                {
+                    fileInfo.Add(new FileInfo(description.GetPath()));
+                }
+            }
+        }
 
+        public static string GetActualPath(string filepath, string selectedItem)
+        {
+            SearchFilesByName(filepath, selectedItem);
+            return GetFiles().First().FullName;
+        }
 
-        public static List<DirectoryInfo> getDirectories()
+        public static List<DirectoryInfo> GetDirectories()
         {
             return directoryInfo;
         }
 
-        public static List<FileInfo> getFiles()
+        public static List<FileInfo> GetFiles()
         {
             return fileInfo;
         }
