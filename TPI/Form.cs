@@ -7,7 +7,7 @@ namespace TPI
 {
     public partial class FileManager : Form
     {
-        string filePath = "C:/";
+        string filePath = "";
         string selectedItem = "";
         List<Description> descriptions = new List<Description>();
         string actualPath = null;
@@ -15,12 +15,32 @@ namespace TPI
         public FileManager()
         {
             InitializeComponent();
+            LoadDisks();
+        }
+
+        public void LoadDisks()
+        {
+            DriveInfo[] drives = DriveInfo.GetDrives();
+            for (int i = 0; i < drives.Length; i++)
+            {
+                driversListView.Items.Add(drives[i].Name, 0);
+            }
+        }
+
+        private void driversListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            selectedItem = e.Item.Text;
+        }
+
+        private void driversListView_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            filePath = selectedItem;
             LoadFilesAndDirectories();
         }
 
         public void LoadFilesAndDirectories()
         {
-            listView.Items.Clear();
+            dirFilesListView.Items.Clear();
 
             Filefinder.SearchFilesAndDirectories(filePath);
             LoadDirectories(Filefinder.GetDirectories());
@@ -33,7 +53,7 @@ namespace TPI
             {
                 if ((dirInfo.Attributes & FileAttributes.Hidden) != FileAttributes.Hidden)
                 {
-                    listView.Items.Add(dirInfo.Name, 0);
+                    dirFilesListView.Items.Add(dirInfo.Name, 1);
                 }
             }
         }
@@ -44,7 +64,15 @@ namespace TPI
             {
                 if ((fileInfo.Attributes & FileAttributes.Hidden) != FileAttributes.Hidden)
                 {
-                    listView.Items.Add(fileInfo.Name, 1);
+                    switch (fileInfo.Extension)
+                    {
+                        case ".mp4": dirFilesListView.Items.Add(fileInfo.Name, 3);  break;
+                        case ".jpg":
+                        case ".png": dirFilesListView.Items.Add(fileInfo.Name, 4);  break;
+                        case ".pdf":
+                        case ".txt": dirFilesListView.Items.Add(fileInfo.Name, 5);  break;
+                        default: dirFilesListView.Items.Add(fileInfo.Name, 2);  break;
+                    }
                 }
             }
         }
@@ -79,11 +107,14 @@ namespace TPI
                 Description temp = CheckDescriptions();
                 if (temp != null)
                 {
+                    PopUp(selectedItem, temp);
                     descriptionTextBox.Text = temp.GetDescripcion();
                 }
                 descriptionTextBox.Focus();
                 saveButton.Enabled = true;
                 cancelButton.Enabled = true;
+
+                PopUp(selectedItem, null);
             }
         }
 
@@ -104,6 +135,13 @@ namespace TPI
             return temp;
         }
 
+        public void PopUp(string name, Description description)
+        {
+            var popUp = new PopUpForm();
+            popUp.LoadPopUp(name, description);
+            popUp.ShowDialog();
+        }
+
         private void BackButton_Click(object sender, EventArgs e)
         {
             if (filePath != "C:/")
@@ -118,7 +156,7 @@ namespace TPI
             Filefinder.SearchFilesByName(filePath, searchBar.Text);
             Filefinder.SearchFilesByDescription(descriptions, searchBar.Text);
 
-            listView.Items.Clear();
+            dirFilesListView.Items.Clear();
 
             LoadFiles(Filefinder.GetFiles());
         }
