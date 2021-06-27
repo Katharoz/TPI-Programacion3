@@ -12,6 +12,8 @@ namespace TPI
         List<Description> descriptions = new List<Description>();
         string actualPath = null;
 
+        List<string> escanedPaths = new List<string>();
+
         public FileManager()
         {
             InitializeComponent();
@@ -34,26 +36,42 @@ namespace TPI
 
         private void driversListView_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            filePath = selectedItem;
-            LoadFilesAndDirectories();
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                filePath = fbd.SelectedPath;
+                escanedPaths.Add(filePath);
+            }
+            //filePath = selectedItem;
+
+            //LoadFilesAndDirectories();
+
+            LoadEscaned();
         }
+
+        public void LoadEscaned()
+        {
+            escanedDirListView.Items.Add(filePath.Substring(filePath.LastIndexOf("\\") + 1), 1);
+        }
+
+
 
         public void LoadFilesAndDirectories()
         {
             dirFilesListView.Items.Clear();
 
             Filefinder.SearchFilesAndDirectories(filePath);
-            LoadDirectories(Filefinder.GetDirectories());
+            LoadDirectories(Filefinder.GetDirectories(), dirFilesListView);
             LoadFiles(Filefinder.GetFiles());
         }
 
-        public void LoadDirectories(List<DirectoryInfo> directories)
+        public void LoadDirectories(List<DirectoryInfo> directories, ListView view)
         {
             foreach (DirectoryInfo dirInfo in directories)
             {
                 if ((dirInfo.Attributes & FileAttributes.Hidden) != FileAttributes.Hidden)
                 {
-                    dirFilesListView.Items.Add(dirInfo.Name, 1);
+                    view.Items.Add(dirInfo.Name, 1);
                 }
             }
         }
@@ -107,14 +125,14 @@ namespace TPI
                 Description temp = CheckDescriptions();
                 if (temp != null)
                 {
-                    PopUp(selectedItem, temp);
+                    ////PopUp(selectedItem, temp);
                     descriptionTextBox.Text = temp.GetDescripcion();
                 }
                 descriptionTextBox.Focus();
                 saveButton.Enabled = true;
                 cancelButton.Enabled = true;
 
-                PopUp(selectedItem, null);
+                //PopUp(selectedItem, null);
             }
         }
 
@@ -191,6 +209,22 @@ namespace TPI
             }
             
         }
+        private void escanedDirListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            selectedItem = e.Item.Text;
+        }
 
+        private void escanedDirListView_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            foreach (string str in escanedPaths)
+            {
+                if (str.Substring(str.LastIndexOf("\\") + 1).Equals(selectedItem))
+                {
+                    filePath = str;
+                    break;
+                }
+            }
+            LoadFilesAndDirectories();
+        }
     }
 }

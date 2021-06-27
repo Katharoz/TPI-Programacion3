@@ -37,10 +37,10 @@ namespace TPI
             this.dirFilesListView = new System.Windows.Forms.ListView();
             this.listaIconos = new System.Windows.Forms.ImageList(this.components);
             this.driversListView = new System.Windows.Forms.ListView();
-            this.cancelButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
             this.descriptionTextBox = new System.Windows.Forms.TextBox();
-            this.descriptionLabel = new System.Windows.Forms.Label();
+            this.escanedDirListView = new System.Windows.Forms.ListView();
             this.SuspendLayout();
             // 
             // backButton
@@ -117,18 +117,6 @@ namespace TPI
             this.driversListView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.driversListView_ItemSelectionChanged);
             this.driversListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.driversListView_MouseDoubleClick);
             // 
-            // cancelButton
-            // 
-            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.cancelButton.Enabled = false;
-            this.cancelButton.Location = new System.Drawing.Point(101, 441);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 7;
-            this.cancelButton.Text = "Cancelar";
-            this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.CancelButton_Click);
-            // 
             // saveButton
             // 
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -141,36 +129,52 @@ namespace TPI
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.cancelButton.Enabled = false;
+            this.cancelButton.Location = new System.Drawing.Point(101, 441);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(75, 23);
+            this.cancelButton.TabIndex = 7;
+            this.cancelButton.Text = "Cancelar";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+            // 
             // descriptionTextBox
             // 
             this.descriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.descriptionTextBox.Location = new System.Drawing.Point(15, 41);
+            this.descriptionTextBox.Enabled = false;
+            this.descriptionTextBox.Location = new System.Drawing.Point(15, 401);
             this.descriptionTextBox.Multiline = true;
             this.descriptionTextBox.Name = "descriptionTextBox";
-            this.descriptionTextBox.Size = new System.Drawing.Size(161, 354);
+            this.descriptionTextBox.Size = new System.Drawing.Size(161, 25);
             this.descriptionTextBox.TabIndex = 5;
             this.descriptionTextBox.LostFocus += new System.EventHandler(this.DescriptionTextBox_LostFocus);
             // 
-            // descriptionLabel
+            // escanedDirListView
             // 
-            this.descriptionLabel.AutoSize = true;
-            this.descriptionLabel.Location = new System.Drawing.Point(12, 17);
-            this.descriptionLabel.Name = "descriptionLabel";
-            this.descriptionLabel.Size = new System.Drawing.Size(63, 13);
-            this.descriptionLabel.TabIndex = 4;
-            this.descriptionLabel.Text = "Descripción";
+            this.escanedDirListView.HideSelection = false;
+            this.escanedDirListView.Location = new System.Drawing.Point(12, 41);
+            this.escanedDirListView.Name = "escanedDirListView";
+            this.escanedDirListView.Size = new System.Drawing.Size(164, 354);
+            this.escanedDirListView.TabIndex = 9;
+            this.escanedDirListView.UseCompatibleStateImageBehavior = false;
+            this.escanedDirListView.View = System.Windows.Forms.View.Details;
+            this.escanedDirListView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.escanedDirListView_ItemSelectionChanged);
+            this.escanedDirListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.escanedDirListView_MouseDoubleClick);
             // 
             // FileManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(871, 481);
+            this.Controls.Add(this.escanedDirListView);
             this.Controls.Add(this.driversListView);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.descriptionTextBox);
-            this.Controls.Add(this.descriptionLabel);
             this.Controls.Add(this.dirFilesListView);
             this.Controls.Add(this.searchBar);
             this.Controls.Add(this.searchButton);
@@ -190,10 +194,10 @@ namespace TPI
         private System.Windows.Forms.ListView dirFilesListView;
         private System.Windows.Forms.ImageList listaIconos;
         private System.Windows.Forms.ListView driversListView;
-        private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.TextBox descriptionTextBox;
-        private System.Windows.Forms.Label descriptionLabel;
+        private System.Windows.Forms.ListView escanedDirListView;
     }
 }
 
