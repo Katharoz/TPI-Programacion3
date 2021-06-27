@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TPI
@@ -17,18 +10,13 @@ namespace TPI
             InitializeComponent();
         }
 
-        public void LoadPopUp(string name, Description description)
+        public void LoadPopUp(string name, string description)
         {
-            nameTextBox.Text = name;
+            nameLabel.Text = name;
             if (description != null)
             {
-                descriptionTextBox.Text = description.GetDescripcion();
+                descriptionTextBox.Text = description;
             }
-        }
-
-        public string GetName()
-        {
-            return nameTextBox.Text;
         }
 
         public string GetDescription()
@@ -36,7 +24,7 @@ namespace TPI
             return descriptionTextBox.Text;
         }
 
-        private void saveButton_Click(object sender, EventArgs e)
+        private void SaveButton_Click(object sender, EventArgs e)
         {
             this.Close();
         }

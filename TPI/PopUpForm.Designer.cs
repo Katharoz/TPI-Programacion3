@@ -29,20 +29,11 @@ namespace TPI
         /// </summary>
         private void InitializeComponent()
         {
-            this.nameTextBox = new System.Windows.Forms.TextBox();
             this.descriptionTextBox = new System.Windows.Forms.TextBox();
             this.cancelButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
+            this.nameLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // nameTextBox
-            // 
-            this.nameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.nameTextBox.Location = new System.Drawing.Point(12, 12);
-            this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.Size = new System.Drawing.Size(236, 20);
-            this.nameTextBox.TabIndex = 0;
             // 
             // descriptionTextBox
             // 
@@ -72,7 +63,15 @@ namespace TPI
             this.saveButton.TabIndex = 3;
             this.saveButton.Text = "Guardar";
             this.saveButton.UseVisualStyleBackColor = true;
-            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            this.saveButton.Click += new System.EventHandler(this.SaveButton_Click);
+            // 
+            // nameLabel
+            // 
+            this.nameLabel.AutoSize = true;
+            this.nameLabel.Location = new System.Drawing.Point(12, 9);
+            this.nameLabel.Name = "nameLabel";
+            this.nameLabel.Size = new System.Drawing.Size(0, 13);
+            this.nameLabel.TabIndex = 4;
             // 
             // PopUpForm
             // 
@@ -81,10 +80,10 @@ namespace TPI
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(260, 330);
+            this.Controls.Add(this.nameLabel);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.descriptionTextBox);
-            this.Controls.Add(this.nameTextBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "PopUpForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -95,10 +94,9 @@ namespace TPI
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox nameTextBox;
         private System.Windows.Forms.TextBox descriptionTextBox;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.Label nameLabel;
     }
 }

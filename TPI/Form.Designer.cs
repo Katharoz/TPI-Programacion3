@@ -31,27 +31,18 @@ namespace TPI
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FileManager));
-            this.backButton = new System.Windows.Forms.Button();
             this.searchButton = new System.Windows.Forms.Button();
             this.searchBar = new System.Windows.Forms.TextBox();
-            this.dirFilesListView = new System.Windows.Forms.ListView();
+            this.filesListView = new System.Windows.Forms.ListView();
+            this.columnName_FileView = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnType_FileView = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnLastM_FileView = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnComentary = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listaIconos = new System.Windows.Forms.ImageList(this.components);
             this.driversListView = new System.Windows.Forms.ListView();
-            this.saveButton = new System.Windows.Forms.Button();
-            this.cancelButton = new System.Windows.Forms.Button();
-            this.descriptionTextBox = new System.Windows.Forms.TextBox();
             this.escanedDirListView = new System.Windows.Forms.ListView();
+            this.columnName_escanneddisk = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
-            // 
-            // backButton
-            // 
-            this.backButton.Location = new System.Drawing.Point(182, 12);
-            this.backButton.Name = "backButton";
-            this.backButton.Size = new System.Drawing.Size(75, 23);
-            this.backButton.TabIndex = 0;
-            this.backButton.Text = "Volver";
-            this.backButton.UseVisualStyleBackColor = true;
-            this.backButton.Click += new System.EventHandler(this.BackButton_Click);
             // 
             // searchButton
             // 
@@ -68,27 +59,47 @@ namespace TPI
             // 
             this.searchBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchBar.Location = new System.Drawing.Point(263, 14);
+            this.searchBar.Location = new System.Drawing.Point(182, 14);
             this.searchBar.Name = "searchBar";
-            this.searchBar.Size = new System.Drawing.Size(515, 20);
+            this.searchBar.Size = new System.Drawing.Size(596, 20);
             this.searchBar.TabIndex = 2;
             // 
             // dirFilesListView
             // 
-            this.dirFilesListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.filesListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dirFilesListView.HideSelection = false;
-            this.dirFilesListView.LargeImageList = this.listaIconos;
-            this.dirFilesListView.Location = new System.Drawing.Point(182, 41);
-            this.dirFilesListView.Name = "dirFilesListView";
-            this.dirFilesListView.Size = new System.Drawing.Size(677, 354);
-            this.dirFilesListView.SmallImageList = this.listaIconos;
-            this.dirFilesListView.TabIndex = 3;
-            this.dirFilesListView.UseCompatibleStateImageBehavior = false;
-            this.dirFilesListView.View = System.Windows.Forms.View.Tile;
-            this.dirFilesListView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListView_ItemSelectionChanged);
-            this.dirFilesListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListView_MouseDoubleClick);
+            this.filesListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnName_FileView,
+            this.columnType_FileView,
+            this.columnLastM_FileView,
+            this.columnComentary});
+            this.filesListView.HideSelection = false;
+            this.filesListView.LargeImageList = this.listaIconos;
+            this.filesListView.Location = new System.Drawing.Point(182, 41);
+            this.filesListView.Name = "dirFilesListView";
+            this.filesListView.Size = new System.Drawing.Size(677, 354);
+            this.filesListView.SmallImageList = this.listaIconos;
+            this.filesListView.TabIndex = 3;
+            this.filesListView.UseCompatibleStateImageBehavior = false;
+            this.filesListView.View = System.Windows.Forms.View.Details;
+            this.filesListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListView_MouseDoubleClick);
+            // 
+            // columnName_FileView
+            // 
+            this.columnName_FileView.Text = "Name";
+            // 
+            // columnType_FileView
+            // 
+            this.columnType_FileView.Text = "Type";
+            // 
+            // columnLastM_FileView
+            // 
+            this.columnLastM_FileView.Text = "Last Modified";
+            // 
+            // columnComentary
+            // 
+            this.columnComentary.Text = "Comentary";
             // 
             // listaIconos
             // 
@@ -107,63 +118,35 @@ namespace TPI
             | System.Windows.Forms.AnchorStyles.Right)));
             this.driversListView.HideSelection = false;
             this.driversListView.LargeImageList = this.listaIconos;
-            this.driversListView.Location = new System.Drawing.Point(182, 401);
+            this.driversListView.Location = new System.Drawing.Point(12, 401);
             this.driversListView.Name = "driversListView";
-            this.driversListView.Size = new System.Drawing.Size(677, 63);
+            this.driversListView.Size = new System.Drawing.Size(847, 63);
             this.driversListView.SmallImageList = this.listaIconos;
             this.driversListView.TabIndex = 8;
             this.driversListView.UseCompatibleStateImageBehavior = false;
             this.driversListView.View = System.Windows.Forms.View.Tile;
-            this.driversListView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.driversListView_ItemSelectionChanged);
-            this.driversListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.driversListView_MouseDoubleClick);
-            // 
-            // saveButton
-            // 
-            this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.saveButton.Enabled = false;
-            this.saveButton.Location = new System.Drawing.Point(15, 441);
-            this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(75, 23);
-            this.saveButton.TabIndex = 6;
-            this.saveButton.Text = "Guardar";
-            this.saveButton.UseVisualStyleBackColor = true;
-            this.saveButton.Click += new System.EventHandler(this.SaveButton_Click);
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.cancelButton.Enabled = false;
-            this.cancelButton.Location = new System.Drawing.Point(101, 441);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 7;
-            this.cancelButton.Text = "Cancelar";
-            this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.CancelButton_Click);
-            // 
-            // descriptionTextBox
-            // 
-            this.descriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.descriptionTextBox.Enabled = false;
-            this.descriptionTextBox.Location = new System.Drawing.Point(15, 401);
-            this.descriptionTextBox.Multiline = true;
-            this.descriptionTextBox.Name = "descriptionTextBox";
-            this.descriptionTextBox.Size = new System.Drawing.Size(161, 25);
-            this.descriptionTextBox.TabIndex = 5;
-            this.descriptionTextBox.LostFocus += new System.EventHandler(this.DescriptionTextBox_LostFocus);
+            this.driversListView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.DriversListView_ItemSelectionChanged);
+            this.driversListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.DriversListView_MouseDoubleClick);
             // 
             // escanedDirListView
             // 
+            this.escanedDirListView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.escanedDirListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnName_escanneddisk});
             this.escanedDirListView.HideSelection = false;
-            this.escanedDirListView.Location = new System.Drawing.Point(12, 41);
+            this.escanedDirListView.Location = new System.Drawing.Point(12, 14);
             this.escanedDirListView.Name = "escanedDirListView";
-            this.escanedDirListView.Size = new System.Drawing.Size(164, 354);
+            this.escanedDirListView.Size = new System.Drawing.Size(164, 381);
+            this.escanedDirListView.SmallImageList = this.listaIconos;
             this.escanedDirListView.TabIndex = 9;
             this.escanedDirListView.UseCompatibleStateImageBehavior = false;
             this.escanedDirListView.View = System.Windows.Forms.View.Details;
-            this.escanedDirListView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.escanedDirListView_ItemSelectionChanged);
             this.escanedDirListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.escanedDirListView_MouseDoubleClick);
+            // 
+            // columnName_escanneddisk
+            // 
+            this.columnName_escanneddisk.Text = "Name";
             // 
             // FileManager
             // 
@@ -172,13 +155,9 @@ namespace TPI
             this.ClientSize = new System.Drawing.Size(871, 481);
             this.Controls.Add(this.escanedDirListView);
             this.Controls.Add(this.driversListView);
-            this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.saveButton);
-            this.Controls.Add(this.descriptionTextBox);
-            this.Controls.Add(this.dirFilesListView);
+            this.Controls.Add(this.filesListView);
             this.Controls.Add(this.searchBar);
             this.Controls.Add(this.searchButton);
-            this.Controls.Add(this.backButton);
             this.Name = "FileManager";
             this.Text = "FileManager";
             this.ResumeLayout(false);
@@ -187,17 +166,17 @@ namespace TPI
         }
 
         #endregion
-
-        private System.Windows.Forms.Button backButton;
         private System.Windows.Forms.Button searchButton;
         private System.Windows.Forms.TextBox searchBar;
-        private System.Windows.Forms.ListView dirFilesListView;
+        private System.Windows.Forms.ListView filesListView;
         private System.Windows.Forms.ImageList listaIconos;
         private System.Windows.Forms.ListView driversListView;
-        private System.Windows.Forms.Button saveButton;
-        private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.TextBox descriptionTextBox;
         private System.Windows.Forms.ListView escanedDirListView;
+        private System.Windows.Forms.ColumnHeader columnName_escanneddisk;
+        private System.Windows.Forms.ColumnHeader columnName_FileView;
+        private System.Windows.Forms.ColumnHeader columnType_FileView;
+        private System.Windows.Forms.ColumnHeader columnLastM_FileView;
+        private System.Windows.Forms.ColumnHeader columnComentary;
     }
 }
 
